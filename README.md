@@ -21,13 +21,14 @@ A simple **Java-based console application** that allows users to register, log i
 
 ## Project Structure
 
- DailyPlanner/
+```
+DailyPlanner/
 │
-├── Task.java # Defines the Task object with description and time
-├── User.java # Defines the User object with username, password, and list of tasks
-├── DailyPlanner.java # Manages users, login/logout, and task operations
+├── Task.java          # Defines the Task object with description and time
+├── User.java          # Defines the User object with username, password, and list of tasks
+├── DailyPlanner.java  # Manages users, login/logout, and task operations
 └── Daily_Planner.java # Main class with the console menu and user interaction
-
+```
 
 ## Requirements
 
@@ -63,4 +64,3 @@ A simple **Java-based console application** that allows users to register, log i
 
 ## Author
   Created by SUDHANSHU SHARMA
-  Project for Academic Purposes – 2025
