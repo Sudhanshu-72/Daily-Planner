@@ -4,7 +4,7 @@ import java.util.Scanner;
 // Task class
 class Task {
     private String description;
-    private String time;  // e.g., "09:00 AM"
+    private String time;
 
     public Task(String description, String time) {
         this.description = description;
@@ -51,6 +51,8 @@ class User {
     public void removeTask(int index) {
         if (index >= 0 && index < tasks.size()) {
             tasks.remove(index);
+        } else {
+            System.out.println("Error: Invalid task number.");
         }
     }
 
@@ -70,8 +72,12 @@ class DailyPlanner {
     }
 
     public boolean register(String username, String password) {
+        if (username.isEmpty() || password.isEmpty()) {
+            System.out.println("Username or password cannot be empty.");
+            return false;
+        }
         if (getUserByUsername(username) != null) {
-            return false;  // username taken
+            return false;
         }
         users.add(new User(username, password));
         return true;
@@ -104,7 +110,7 @@ class DailyPlanner {
     }
 }
 
-public class Daily_Planner {
+public class DailyPlannerApp {
     private static Scanner scanner = new Scanner(System.in);
     private static DailyPlanner planner = new DailyPlanner();
 
@@ -124,7 +130,7 @@ public class Daily_Planner {
         System.out.println("2. Login");
         System.out.println("0. Exit");
         System.out.print("Choose option: ");
-        String choice = scanner.nextLine();
+        String choice = scanner.nextLine().trim();
 
         switch (choice) {
             case "1" -> registerUser();
@@ -133,28 +139,33 @@ public class Daily_Planner {
                 System.out.println("Goodbye!");
                 System.exit(0);
             }
-            default -> System.out.println("Invalid option");
+            default -> System.out.println("Invalid option. Please enter 1, 2 or 0.");
         }
     }
 
     private static void registerUser() {
         System.out.print("Enter new username: ");
-        String username = scanner.nextLine();
+        String username = scanner.nextLine().trim();
         System.out.print("Enter new password: ");
-        String password = scanner.nextLine();
+        String password = scanner.nextLine().trim();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            System.out.println("Username and password must not be empty.");
+            return;
+        }
 
         if (planner.register(username, password)) {
             System.out.println("Registration successful! Please login.");
         } else {
-            System.out.println("Username already taken.");
+            System.out.println("Username already taken or invalid input.");
         }
     }
 
     private static void loginUser() {
         System.out.print("Username: ");
-        String username = scanner.nextLine();
+        String username = scanner.nextLine().trim();
         System.out.print("Password: ");
-        String password = scanner.nextLine();
+        String password = scanner.nextLine().trim();
 
         if (planner.login(username, password)) {
             System.out.println("Logged in successfully. Welcome, " + username + "!");
@@ -170,7 +181,7 @@ public class Daily_Planner {
         System.out.println("3. Delete Task");
         System.out.println("4. Logout");
         System.out.print("Choose option: ");
-        String choice = scanner.nextLine();
+        String choice = scanner.nextLine().trim();
 
         switch (choice) {
             case "1" -> addTask();
@@ -180,15 +191,20 @@ public class Daily_Planner {
                 planner.logout();
                 System.out.println("Logged out.");
             }
-            default -> System.out.println("Invalid option");
+            default -> System.out.println("Invalid option. Please enter 1 to 4.");
         }
     }
 
     private static void addTask() {
         System.out.print("Enter task time (e.g., 09:00 AM): ");
-        String time = scanner.nextLine();
+        String time = scanner.nextLine().trim();
         System.out.print("Enter task description: ");
-        String desc = scanner.nextLine();
+        String desc = scanner.nextLine().trim();
+
+        if (time.isEmpty() || desc.isEmpty()) {
+            System.out.println("Time and description cannot be empty.");
+            return;
+        }
 
         Task task = new Task(desc, time);
         planner.getLoggedInUser().addTask(task);
@@ -208,14 +224,24 @@ public class Daily_Planner {
     }
 
     private static void deleteTask() {
+        ArrayList<Task> tasks = planner.getLoggedInUser().getTasks();
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks to delete.");
+            return;
+        }
+
         viewTasks();
         System.out.print("Enter task number to delete: ");
         try {
             int taskNum = Integer.parseInt(scanner.nextLine());
+            if (taskNum < 1 || taskNum > tasks.size()) {
+                System.out.println("Invalid task number.");
+                return;
+            }
             planner.getLoggedInUser().removeTask(taskNum - 1);
-            System.out.println("Task deleted (if valid number).");
+            System.out.println("Task deleted.");
         } catch (NumberFormatException e) {
-            System.out.println("Invalid number.");
+            System.out.println("Invalid number format.");
         }
     }
 }
