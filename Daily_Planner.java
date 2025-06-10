@@ -110,7 +110,7 @@ class DailyPlanner {
     }
 }
 
-public class DailyPlannerApp {
+public class Daily_Planner {
     private static Scanner scanner = new Scanner(System.in);
     private static DailyPlanner planner = new DailyPlanner();
 
